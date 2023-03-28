@@ -2,62 +2,102 @@ import React, { useEffect, useState } from 'react'
 import { auth } from './config/Firebase-config'
 import { useNavigate } from 'react-router-dom';
 import { CirclesWithBar, ProgressBar, Triangle } from 'react-loader-spinner';
-import { ProviderId, signOut } from 'firebase/auth';
+import { EmailAuthProvider, getAuth, isSignInWithEmailLink, linkWithCredential, ProviderId, signInWithEmailLink, signOut } from 'firebase/auth';
+import { async } from '@firebase/util';
 
 function Home() {
     const [name,setName]=useState('')
     const [email,setEmail]=useState('')
+    const [number,setNumber]=useState('')
     const [creationTime,setCreationTime]=useState('')
     const [lastLoginAt,setlastLoginAt]=useState('')
     const [photoURL,setphotoURL]=useState('')
     const [loader,setloader]=useState(true)
     const Navigate=useNavigate();
     const Getdata=()=>{
+
         setloader(true)
         setTimeout(()=>{
-           
-            console.log('auth',auth)
-            if(auth){
-                console.log("auth.hasOwnProperty('currentUser')",auth.hasOwnProperty('currentUser'))
-            if(auth.currentUser !== null){
-                const user = auth?.currentUser;
-
+             const auth = getAuth();
+             const user = auth.currentUser;
+             
+            if(user){
+              
+             
+               console.log('here ia am',user)
+          
+                setNumber(user?.phoneNumber)
                 setName(user?.displayName)
                 setEmail(user?.email)
-                setCreationTime(user?.metadata.creationTime)
+                setCreationTime(user?.metadata?.creationTime)
                 setphotoURL(user?.photoURL)
                
-            }
-            else{
-                Navigate('/')
-            }
-               
-            }
-            else{
-               
-            }
-        setloader(false)
+      
+            if(isSignInWithEmailLink(auth, window.location.href)){
+                // now in case user clicks the email link on a different device, we will ask for email confirmation
+                let email = localStorage.getItem('email');
+                console.log('email',email)
+                if(!email){
+                    Navigate('/');
 
-        },500)
+                }
+                // after that we will complete the login process
+                setloader(true);
+                signInWithEmailLink(auth, localStorage.getItem('email'), window.location.href)
+                .then((result)=>{
+                    let user_data=result.user
+                // we can get the user from result.user but no need in this case
+                console.log(user_data.user);
+                setName(user_data?.displayName)
+                setEmail(user_data?.email)
+                setCreationTime(user_data?.metadata.creationTime)
+                setphotoURL(user_data?.photoURL)
+                setloader(false);
+                }).catch((err)=>{
+                setloader(false);
+                const credential = EmailAuthProvider.credentialWithLink(
+                    email, window.location.href);
+                  
+                  // Link the credential to the current user.
+                  const auth = getAuth();
+                  linkWithCredential(auth.currentUser, credential)
+                    .then((usercred) => {
+                      console.log('usercred',usercred)
+                    })
+                    .catch((error) => {
+                      // Some error occurred.
+                      console.log('error',error)
+                    });
+              
+                })
+            
+            }
+             
+            }
+            else{
+                Navigate('/');
+            }
+            setloader(false)
+
+        }, 700 )
     }
     useEffect(()=>{
         Getdata()
-       
-          
         },[])
         const signOutFunc = () => {
             signOut(auth).then((res) => {
+                localStorage.clear()
               Navigate('/') 
             })
             .catch((err) => {
               console.log(err);
             });
           };
+
    
 
   return (
-    <div>{
-        
+    <div>{        
         loader?<div style={{marginTop:'33vh',textAlign:'center'}}>
                 <CirclesWithBar
             height="150"
@@ -70,7 +110,6 @@ function Home() {
             innerCircleColor="white"
             barColor="white"
             ariaLabel='circles-with-bar-loading'
-           
             />
         </div>:<>
         <div className="container mt-4 mb-4 p-3 d-flex justify-content-center">
@@ -78,6 +117,7 @@ function Home() {
         <div className=" image d-flex flex-column justify-content-center align-items-center">
             <button className="btn btn-secondary"> <img src={photoURL != ""?photoURL:"https://i.imgur.com/wvxPV9S.png"} height="100" width="100" /></button>
             <span className="name mt-3">{name}</span> <span className="idd">{email}</span>
+            <span className="idd">{number}</span>
             <div className="d-flex flex-row justify-content-center align-items-center gap-2"></div>
                 <div className=" px-2 rounded mt-4 date "> <span className="join">{creationTime}</span> </div>
           
