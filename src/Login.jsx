@@ -180,7 +180,7 @@ function App() {
                         set_Email_verify(e.target.value) }}></input>
                     <br /><br />
                     <div style={{width:'100%',textAlign:'end'}}>
-                      <button  className='btn  btn-primary' onClick={()=>{send()}}>Verify</button>
+                      <button  className='btn  btn-primary' onClick={()=>{}}>Verify</button>
                 </div>
         </Modal.Body>
         <Modal.Footer className='justify-content-center'>
