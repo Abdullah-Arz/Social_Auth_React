@@ -32,7 +32,7 @@ function App() {
     const handle_email_close = () => setShow(false);
     const handle_email_auth_close = () => set_email_auth_modal(false);
     
-    // localStorage.setItem('email', "shariq.ali@bitswits.com");
+    localStorage.setItem('email', "shariq.ali@bitswits.com");
 
     
     

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { auth } from './config/Firebase-config'
 import { useNavigate } from 'react-router-dom';
-import { CirclesWithBar, ProgressBar, Triangle } from 'react-loader-spinner';
-import { EmailAuthProvider, getAuth, isSignInWithEmailLink, linkWithCredential, ProviderId, signInWithEmailLink, signOut } from 'firebase/auth';
-import { async } from '@firebase/util';
+import { CirclesWithBar} from 'react-loader-spinner';
+import { EmailAuthProvider, getAuth, isSignInWithEmailLink, linkWithCredential, signInWithEmailLink, signOut } from 'firebase/auth';
 
 function Home() {
     const [name,setName]=useState('')
@@ -33,7 +32,10 @@ function Home() {
                 setphotoURL(user?.photoURL)
                
       
-            if(isSignInWithEmailLink(auth, window.location.href)){
+            
+             
+            }
+            else if(isSignInWithEmailLink(auth, window.location.href)){
                 // now in case user clicks the email link on a different device, we will ask for email confirmation
                 let email = localStorage.getItem('email');
                 console.log('email',email)
@@ -67,12 +69,11 @@ function Home() {
                     .catch((error) => {
                       // Some error occurred.
                       console.log('error',error)
+                      Navigate('/')
                     });
               
                 })
             
-            }
-             
             }
             else{
                 Navigate('/');
@@ -97,7 +98,7 @@ function Home() {
    
 
   return (
-    <div>{        
+    <React.Fragment>{        
         loader?<div style={{marginTop:'33vh',textAlign:'center'}}>
                 <CirclesWithBar
             height="150"
@@ -134,7 +135,7 @@ function Home() {
         </>
         }
         
-    </div>
+    </React.Fragment>
   )
 }
 
