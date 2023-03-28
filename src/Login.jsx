@@ -1,7 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
-import { auth,twitterProvider, googleProvider,facebookProvider,analytics, githubProvider } from './config/Firebase-config'
-import { signInWithPopup, signOut,fetchSignInMethodsForEmail, signInWithEmailAndPassword, OAuthProvider, RecaptchaVerifier , signInWithPhoneNumber, isSignInWithEmailLink, signInWithEmailLink, createUserWithEmailAndPassword, sendSignInLinkToEmail } from 'firebase/auth';
+import { auth,twitterProvider, googleProvider,facebookProvider,githubProvider } from './config/Firebase-config'
+import { signInWithPopup, signOut,fetchSignInMethodsForEmail, signInWithEmailAndPassword, RecaptchaVerifier , signInWithPhoneNumber, createUserWithEmailAndPassword, sendSignInLinkToEmail } from 'firebase/auth';
 import { useNavigate,useLocation  } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';

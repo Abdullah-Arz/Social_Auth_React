@@ -9,7 +9,6 @@ function Home() {
     const [email,setEmail]=useState('')
     const [number,setNumber]=useState('')
     const [creationTime,setCreationTime]=useState('')
-    const [lastLoginAt,setlastLoginAt]=useState('')
     const [photoURL,setphotoURL]=useState('')
     const [loader,setloader]=useState(true)
     const Navigate=useNavigate();
