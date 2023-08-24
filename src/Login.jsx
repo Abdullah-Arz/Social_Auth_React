@@ -265,7 +265,7 @@ function App() {
                         set_password_login(e.target.value) }}></input>
                     <br /><br />
                     <div style={{width:'100%',textAlign:'end'}}>
-                      <button  className='btn  btn-primary' onClick={()=>{send()}}>Verify</button>
+                      <button  className='btn  btn-primary' onClick={()=>{verifyOtp()}}>Verify</button>
                 </div>
         </Modal.Body>
         <Modal.Footer className='justify-content-center'>
